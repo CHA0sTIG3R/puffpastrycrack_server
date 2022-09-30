@@ -1,11 +1,11 @@
 package com.cha0stig3r.recipe.server.controller;
 
+
 import com.cha0stig3r.recipe.server.model.Recipe;
 import com.cha0stig3r.recipe.server.repository.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,12 +19,14 @@ public class RecipeController {
     @PostMapping("/add-recipe")
     public String addRecipe(@RequestParam String name,
                             @RequestParam String type,
+                            @RequestParam String description,
                             @RequestParam List<String> ingredients,
                             @RequestParam List<String> directions)
     {
         Recipe recipe = new Recipe();
         recipe.setName(name);
         recipe.setType(type);
+        recipe.setDescription(description);
         recipe.setDate(new Date());
         recipe.setIngredients(ingredients);
         recipe.setDirections(directions);
@@ -37,10 +39,13 @@ public class RecipeController {
         return recipeRepo.findAll();
     }
 
+    @GetMapping("/type")
+    public Iterable<Recipe> getRecipesByType(@RequestParam String type){
+        return (Iterable<Recipe>) recipeRepo.findRecipesByType(type);
+    }
+
     @GetMapping("/date")
     public Iterable<Recipe> getRecipesByDate(){
-        List<Recipe> list = new ArrayList<>();
-        list.add(recipeRepo.findRecipesByDate(new Date()));
-        return list;
+        return recipeRepo.findRecipesByDate(new Date());
     }
 }

@@ -14,6 +14,7 @@ public class Recipe {
 
     private String name;
     private String type;
+    private String description;
     @Temporal(TemporalType.DATE)
     @CreatedDate
     private Date date;
@@ -44,6 +45,14 @@ public class Recipe {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setDate(Date date) {
