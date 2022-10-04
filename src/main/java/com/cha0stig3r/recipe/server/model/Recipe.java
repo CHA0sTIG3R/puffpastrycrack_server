@@ -1,20 +1,21 @@
 package com.cha0stig3r.recipe.server.model;
 
+import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 
-import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
 @Entity
-public class Recipe {
+public class Recipe{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
 
     private String name;
     private String type;
     private String description;
+    private String imgLocation;
     @Temporal(TemporalType.DATE)
     @CreatedDate
     private Date date;
@@ -23,11 +24,10 @@ public class Recipe {
     @ElementCollection
     private List<String> directions;
 
-    public void setId(Integer id) {
-        this.id = id;
+    public Recipe() {
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
@@ -55,6 +55,14 @@ public class Recipe {
         this.description = description;
     }
 
+    public String getImgLocation() {
+        return imgLocation;
+    }
+
+    public void setImgLocation(String imageLocation) {
+        this.imgLocation = imageLocation;
+    }
+
     public void setDate(Date date) {
         this.date = date;
     }
@@ -78,4 +86,5 @@ public class Recipe {
     public void setDirections(List<String> directions) {
         this.directions = directions;
     }
+    
 }
