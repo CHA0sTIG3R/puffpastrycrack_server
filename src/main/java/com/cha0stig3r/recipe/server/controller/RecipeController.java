@@ -28,6 +28,11 @@ public class RecipeController {
         return new FileSystemResource(service.RESOURCES_DIR + url);
     }
 
+    @GetMapping("/search-recipe")
+    public List<RecipeDto> getSearched(@RequestParam String query){
+        return service.getSearchedName(query);
+    }
+
     @GetMapping("/get-recipe/All")
     public List<RecipeDto> getRecipes(){
         return service.getRecipes();

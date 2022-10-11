@@ -15,6 +15,8 @@ import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 
+import static com.cha0stig3r.recipe.server.utility.FormatRecipeUtility.dtoFormat;
+
 @Service
 public class RecipeService {
 
@@ -52,24 +54,16 @@ public class RecipeService {
 
     public List<RecipeDto> getRecipes(){
         List<Recipe> recipes = recipeRepo.findAll();
-        return recipes.stream().map(e -> new RecipeDto(e.getId(),
-                        e.getName(),
-                        e.getType(),
-                        e.getDescription(),
-                        e.getImgLocation(),
-                        e.getIngredients(),
-                        e.getDirections())).toList();
+        return dtoFormat(recipes);
     }
 
     public List<RecipeDto> getByType(String type) {
         List<Recipe> recipes = recipeRepo.findByType(type);
-        return recipes.stream()
-                .map(e -> new RecipeDto(e.getId(),
-                        e.getName(),
-                        e.getType(),
-                        e.getDescription(),
-                        e.getImgLocation(),
-                        e.getIngredients(),
-                        e.getDirections())).toList();
+        return dtoFormat(recipes);
+    }
+
+    public List<RecipeDto> getSearchedName(String query) {
+        var list = recipeRepo.findByNameContainingIgnoreCase(query);
+        return dtoFormat(list);
     }
 }
