@@ -52,13 +52,24 @@ public class RecipeService {
 
     public List<RecipeDto> getRecipes(){
         List<Recipe> recipes = recipeRepo.findAll();
-        List<RecipeDto> list = recipes.stream().map(e -> new RecipeDto(e.getId(),
+        return recipes.stream().map(e -> new RecipeDto(e.getId(),
                         e.getName(),
                         e.getType(),
                         e.getDescription(),
                         e.getImgLocation(),
                         e.getIngredients(),
                         e.getDirections())).toList();
-        return list;
+    }
+
+    public List<RecipeDto> getByType(String type) {
+        List<Recipe> recipes = recipeRepo.findByType(type);
+        return recipes.stream()
+                .map(e -> new RecipeDto(e.getId(),
+                        e.getName(),
+                        e.getType(),
+                        e.getDescription(),
+                        e.getImgLocation(),
+                        e.getIngredients(),
+                        e.getDirections())).toList();
     }
 }
