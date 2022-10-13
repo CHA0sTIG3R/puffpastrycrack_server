@@ -28,19 +28,29 @@ public class RecipeController {
         return new FileSystemResource(service.RESOURCES_DIR + url);
     }
 
+    @GetMapping("/get-recipe/{id}")
+    public RecipeDto getRecipe(@PathVariable Long id){
+        return service.getRecipeById(id);
+    }
+
     @GetMapping("/search-recipe")
     public List<RecipeDto> getSearched(@RequestParam String query){
         return service.getSearchedName(query);
     }
 
-    @GetMapping("/get-recipe/All")
+    @GetMapping("/get-recipes/All")
     public List<RecipeDto> getRecipes(){
         return service.getRecipes();
     }
 
-    @GetMapping(value = {"/get-recipe/{type}", "/get-recipe/{type}/{amount}"})
-    public List<RecipeDto> getByType(@PathVariable String type, @PathVariable(required = false) Optional<Integer> amount){
-        return amount.map(integer -> service.getByType(type).subList(0, integer)).orElseGet(() -> service.getByType(type));
+    @GetMapping(value = {"/get-recipes/recent/{type}", "/get-recipes/recent/{type}/{amount}"})
+    public List<RecipeDto> getRecentType(@PathVariable String type, @PathVariable(required = false) Optional<Integer> amount){
+        return amount.map(integer -> service.getRecentType(type).subList(0, integer)).orElseGet(() -> service.getRecentType(type));
+    }
+
+    @GetMapping("/get-recipes/{type}")
+    public List<RecipeDto> getTypes(@PathVariable String type){
+        return  service.getType(type);
     }
 
 }

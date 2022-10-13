@@ -57,13 +57,23 @@ public class RecipeService {
         return dtoFormat(recipes);
     }
 
-    public List<RecipeDto> getByType(String type) {
-        List<Recipe> recipes = recipeRepo.findByType(type);
+    public List<RecipeDto> getRecentType(String type) {
+        List<Recipe> recipes = recipeRepo.findRecipesByTypeIgnoreCaseOrderByDate(type);
         return dtoFormat(recipes);
     }
 
     public List<RecipeDto> getSearchedName(String query) {
         var list = recipeRepo.findByNameContainingIgnoreCase(query);
         return dtoFormat(list);
+    }
+
+    public RecipeDto getRecipeById(Long id) {
+        var recipe = recipeRepo.findById(id);
+        return dtoFormat(recipe.get());
+    }
+
+    public List<RecipeDto> getType(String type) {
+        var types = recipeRepo.findRecipeByTypeIgnoreCase(type);
+        return dtoFormat(types);
     }
 }
