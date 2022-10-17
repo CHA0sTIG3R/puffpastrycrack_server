@@ -4,7 +4,7 @@ import com.cha0stig3r.recipe.server.model.RecipeDto;
 import com.cha0stig3r.recipe.server.model.RequestBody;
 import com.cha0stig3r.recipe.server.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,8 +24,8 @@ public class RecipeController {
     }
 
     @GetMapping(value = "/url/{url}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public FileSystemResource getImg(@PathVariable String url){
-        return new FileSystemResource(service.RESOURCES_DIR + url);
+    public ByteArrayResource getImg(@PathVariable String url){
+        return service.getImage(url);
     }
 
     @GetMapping("/get-recipe/{id}")
