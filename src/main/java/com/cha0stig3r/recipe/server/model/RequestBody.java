@@ -13,13 +13,13 @@ public class RequestBody {
     private List<String> ingredients;
     private List<String> directions;
 
-    public RequestBody(String name, String type, MultipartFile image, String description, List<String> ingredients, List<String> directions) {
+    public RequestBody(String name, String type, MultipartFile image, String description, String ingredients, String directions) {
         this.name = name;
         this.type = type;
         this.image = image;
         this.description = description;
-        this.ingredients = ingredients;
-        this.directions = directions;
+        this.ingredients = ingredients.lines().toList();
+        this.directions = directions.lines().toList();
     }
 
     public String getName() {
@@ -44,5 +44,17 @@ public class RequestBody {
 
     public List<String> getDirections() {
         return directions;
+    }
+
+    @Override
+    public String toString() {
+        return "RequestBody{" +
+                "name='" + name + '\'' +
+                ", type='" + type + '\'' +
+                ", image=" + image +
+                ", description='" + description + '\'' +
+                ", ingredients=" + ingredients +
+                ", directions=" + directions +
+                '}';
     }
 }
