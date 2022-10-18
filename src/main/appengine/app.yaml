@@ -1,2 +1,2 @@
-runtime: java 17
-env: flex
+runtime: java17
+instance_class: F2
