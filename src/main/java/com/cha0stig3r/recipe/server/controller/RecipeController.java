@@ -1,15 +1,16 @@
 package com.cha0stig3r.recipe.server.controller;
 
 import com.cha0stig3r.recipe.server.model.RecipeDto;
-import com.cha0stig3r.recipe.server.model.RequestBody;
+import com.cha0stig3r.recipe.server.model.RequestDto;
+import com.cha0stig3r.recipe.server.model.RequestUpdate;
 import com.cha0stig3r.recipe.server.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -19,11 +20,27 @@ public class RecipeController {
     private RecipeService service;
 
     @PostMapping(value = "/add-recipe", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public String addRecipe(RequestBody request) throws Exception {
+    public String addRecipe(RequestDto request) throws Exception {
         return service.addRecipe(request);
     }
 
+    @PostMapping(value = "/update-recipe/img/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public String updateRecipe(@PathVariable Long id, RequestDto request) throws Exception {
+        return service.updateRecipe(id, request);
+    }
+
+    @PostMapping(value = "/update-recipe/{id}")
+    public String updateRecipe(@PathVariable Long id, RequestUpdate request){
+        return service.updateRecipe(id, request);
+    }
+
+    @DeleteMapping("/delete-recipe/{id}")
+    public String deleteRecipe(@PathVariable Long id) throws URISyntaxException {
+        return service.deleteRecipe(id);
+    }
+
     @GetMapping(value = "/url/{url}", produces = MediaType.IMAGE_JPEG_VALUE)
+    @ResponseBody
     public ByteArrayResource getImg(@PathVariable String url){
         return service.getImage(url);
     }
@@ -43,9 +60,9 @@ public class RecipeController {
         return service.getRecipes();
     }
 
-    @GetMapping(value = {"/get-recipes/recent/{type}", "/get-recipes/recent/{type}/{amount}"})
-    public List<RecipeDto> getRecentType(@PathVariable String type, @PathVariable(required = false) Optional<Integer> amount){
-        return amount.map(integer -> service.getRecentType(type).subList(0, integer)).orElseGet(() -> service.getRecentType(type));
+    @GetMapping("/get-recipes/recent/{type}")
+    public List<RecipeDto> getRecentType(@PathVariable String type){
+        return service.getRecentType(type).subList(0, 6);
     }
 
     @GetMapping("/get-recipes/{type}")

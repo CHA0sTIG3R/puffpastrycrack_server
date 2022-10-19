@@ -1,13 +1,12 @@
 package com.cha0stig3r.recipe.server.utility;
 
-import com.google.cloud.storage.BlobId;
-import com.google.cloud.storage.BlobInfo;
-import com.google.cloud.storage.Storage;
-import com.google.cloud.storage.StorageOptions;
+import com.google.cloud.storage.*;
 import org.springframework.core.io.ByteArrayResource;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.WritableByteChannel;
 import java.util.Date;
 
 public class GCSUtil {
@@ -29,11 +28,39 @@ public class GCSUtil {
     return objectName;
   }
 
-  public static ByteArrayResource downloadObjectIntoMemory(String objectName) {
+  public static void updateImage(String imageName, byte[] content) throws IOException {
+    Storage storage = StorageOptions.newBuilder().setProjectId(PROJECT_ID).build().getService();
+    BlobId blobId = BlobId.of(BUCKET, PRE+imageName);
+    Blob blob = storage.get(blobId);
+    WritableByteChannel channel = blob.writer();
+    channel.write(ByteBuffer.wrap(content));
+    channel.close();
+  }
+
+  public static ByteArrayResource downloadImage(String imageName) {
 
     Storage storage = StorageOptions.newBuilder().setProjectId(PROJECT_ID).build().getService();
-    byte[] content = storage.readAllBytes(BUCKET, PRE+objectName);
+    byte[] content = storage.readAllBytes(BUCKET, PRE+imageName);
     return new ByteArrayResource(content);
+  }
+
+  public static void deleteImage(String imageName) {
+    Storage storage = StorageOptions.newBuilder().setProjectId(PROJECT_ID).build().getService();
+    Blob blob = storage.get(BUCKET, PRE+imageName);
+    if (blob == null) {
+      System.out.println("The image " + imageName + " wasn't found in " + BUCKET);
+      return;
+    }
+
+    // Optional: set a generation-match precondition to avoid potential race
+    // conditions and data corruptions. The request to upload returns a 412 error if
+    // the object's generation number does not match your precondition.
+    Storage.BlobSourceOption precondition =
+            Storage.BlobSourceOption.generationMatch(blob.getGeneration());
+
+    storage.delete(BUCKET, PRE+imageName, precondition);
+
+    System.out.println("Image " + imageName + " was deleted from " + BUCKET);
   }
 
 }
