@@ -1,7 +1,5 @@
 package com.cha0stig3r.recipe.server.model;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
 
 public class RequestUpdate {

@@ -2,7 +2,6 @@ package com.cha0stig3r.recipe.server.utility;
 
 import com.cha0stig3r.recipe.server.model.Recipe;
 import com.cha0stig3r.recipe.server.model.RecipeDto;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
