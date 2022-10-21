@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -60,9 +61,9 @@ public class RecipeController {
         return service.getRecipes();
     }
 
-    @GetMapping("/get-recipes/recent/{type}")
-    public List<RecipeDto> getRecentType(@PathVariable String type){
-        return service.getRecentType(type).subList(0, 6);
+    @GetMapping(value = {"/get-recipes/recent/{type}", "/get-recipes/recent/{type}/{amount}"})
+    public List<RecipeDto> getRecentType(@PathVariable String type, @PathVariable(required = false) Optional<Integer> amount){
+        return amount.map(integer -> service.getRecentType(type).subList(0, integer)).orElseGet(() -> service.getRecentType(type));
     }
 
     @GetMapping("/get-recipes/{type}")
