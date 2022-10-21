@@ -1,4 +1,13 @@
 # Puffpastrycrack server 
+
+A RESTful API that performs basic CRUD operations on a database using spring.
+
+## Technologies
+* [Java](https://www.java.com)
+* [Spring](https://spring.io/)
+* [MySQL](https://www.mysql.com/)
+* [Google Cloud](https://cloud.google.com/)
+
 ## Spring Boot RESTful API Implementation
 
 * Created JPA Entity [Recipe](src/main/java/com/cha0stig3r/recipe/server/model/Recipe.java)
